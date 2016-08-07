@@ -1,0 +1,6 @@
+#! /usr/bin/env node
+
+var main = require('../lib/main.js')
+var argv = require('yargs').argv;
+console.log(argv);
+main();
