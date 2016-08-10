@@ -1,0 +1,16 @@
+{
+  "name": "ejs-cli",
+  "version": "0.1.0",
+  "description": "Use EJS from the command line",
+  "main": "index.js",
+  "bin": "./bin/ejs-cli",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "XH",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.1",
+    "yargs": "^4.8.1"
+  }
+}
