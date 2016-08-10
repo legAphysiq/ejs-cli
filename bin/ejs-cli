@@ -1,6 +1,37 @@
 #! /usr/bin/env node
 
 var main = require('../lib/main.js')
-var argv = require('yargs').argv;
-console.log(argv);
-main();
+var argv = require('yargs')
+    .usage('Usage: $0 filename [-d] [-o output] [-p options]')
+    .example('$0 ./foo/bar.ejs -d data.json -o ./foo/bar.html -p options.json')
+    .alias('d', 'data')
+    .nargs('d', 1)
+    .describe('d', 'Data')
+    .alias('o', 'output')
+    .nargs('o', 1)
+    .describe('o', 'Output')
+    .alias('p', 'options')
+    .nargs('p', 1)
+    .describe('p', 'Options')
+    .help('h')
+    .alias('h', 'help')
+    .demand(1,'Input File Required')
+    .argv;
+
+if(argv._.length > 1){
+	console.log("Too many arguements");
+	process.exit(1);
+}
+
+/* 
+todo: 
+  validate cli arguements, fs.exists etc.
+  support EJS data, parse and pass an data object
+  support EJS options, parse and pass an options object 
+*/
+var inf = argv._[0];
+var outf = argv.output;
+var data = argv.data===undefined?{}:argv.data;
+var options = argv.options===undefined?{}:argv.options;
+
+main(inf, outf, data, options);
