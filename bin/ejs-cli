@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+var fs = require('fs');
 var main = require('../lib/main.js')
 var argv = require('yargs')
     .usage('Usage: $0 filename [-o output] [-d data] [-p options]')
@@ -18,20 +19,70 @@ var argv = require('yargs')
     .demand(1,'Input File Required')
     .argv;
 
+// should only receive one input file
 if(argv._.length > 1){
 	console.log("Too many arguements");
 	process.exit(1);
 }
 
 /* 
-todo: 
-  validate cli arguements, fs.exists etc.
+todo:
   support EJS data, parse and pass an data object
   support EJS options, parse and pass an options object 
 */
 var inf = argv._[0];
-var outf = argv.output;
+var outf = argv.output===undefined?inf+'.html':outf;
 var data = argv.data===undefined?{}:argv.data;
 var options = argv.options===undefined?{}:argv.options;
 
-main(inf, outf, data, options);
+var handleError = function(err){
+    console.log(err);
+    process.exit(1);
+}
+
+var validateInf = function(){
+    return new Promise(function(res, rej){
+        fs.stat(inf, function(err, stats){
+            if (err) {
+                rej(err)
+            }
+            else{
+                if(stats.isFile()){
+                    res();
+                }
+                else{
+                    rej("Invalid Input File")
+                }
+            }
+        })
+    })
+}
+
+// todo
+var validateData = function(){
+    return new Promise(function(res, rej){
+        res();
+    })
+}
+
+// todo
+var validateOptions = function(){
+    return new Promise(function(res, rej){
+        res();
+    })
+}
+
+var start = function(){
+    main(inf, outf, data, options);
+}
+
+validateInf()
+    .then(validateData, handleError)
+    .then(validateOptions, handleError)
+    .then(start, handleError)
+
+
+// console.log(process.cwd())
+
+
+
